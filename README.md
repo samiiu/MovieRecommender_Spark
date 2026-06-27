@@ -7,7 +7,7 @@ An advanced Big Data and Machine Learning pipeline designed to generate fine-gra
 ##  Project Overview
 Traditional recommendation architectures struggle with massive datasets and the "sparsity problem." This project implements a high-performance **Collaborative Filtering** engine using the **Alternating Least Squares (ALS)** algorithm to predict user preferences and maps abstract IDs to human-readable titles via optimized Spark SQL DataFrame joins.
 
-$$\text{Matrix Factorization Matrix: } R \approx U \times V^T$$
+\text{Matrix Factorization Matrix: } R \approx U \times V^T
 
 - **R (Rating Matrix):** Sparse $m \times n$ matrix containing user interactions.
 - **U (User Matrix):** Latent features capturing unique user behaviors and tastes.
