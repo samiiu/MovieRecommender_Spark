@@ -1,62 +1,57 @@
- Tech Stack & Prerequisites
-Language: Java 17 (OpenJDK)
+ #  MovieRecommenderSpark: Big Data-Driven Machine Learning Movie Recommendation System
 
-Big Data Engine: Apache Spark 3.x (SQL & MLlib modules)
+An advanced Big Data and Machine Learning pipeline designed to generate fine-grained **Top-N Movie Recommendations** from large-scale user interaction data using Apache Spark's distributed computing architecture and Matrix Factorization.
 
-Build Automation: Apache Maven
+---
 
-Containerization: Docker Desktop
+##  Project Overview
+Traditional recommendation architectures struggle with massive datasets and the "sparsity problem." This project implements a high-performance **Collaborative Filtering** engine using the **Alternating Least Squares (ALS)** algorithm to predict user preferences and maps abstract IDs to human-readable titles via optimized Spark SQL DataFrame joins.
 
-Dataset Source: MovieLens Latest Small Dataset
+$$\text{Matrix Factorization Matrix: } R \approx U \times V^T$$
 
- Local & Dockerized Deployment Guide
-Running via Local IDE (IntelliJ IDEA)
-Clone or download the source code structure into your project directory.
+- **R (Rating Matrix):** Sparse $m \times n$ matrix containing user interactions.
+- **U (User Matrix):** Latent features capturing unique user behaviors and tastes.
+- **V (Item Matrix):** Latent features capturing intrinsic movie attributes.
+- **Predicted Score:** Highest values represent the optimal movies recommended to the target user.
 
-Verify that your dataset arrays are correctly located under src/main/resources/.
+---
 
-Open the project inside IntelliJ IDEA and let Maven resolve all required artifacts defined in pom.xml.
+##  Tech Stack & Frameworks
+- **Language:** Java 17 (JDK)
+- **Big Data Architecture:** Apache Spark 3.x (Spark SQL & Spark MLlib)
+- **Build & Dependency Automation:** Apache Maven
+- **DevOps Containerization:** Docker / Docker Desktop
+- **Version Control System:** Git & GitHub
 
-Right-click inside MovieRecommender.java and execute the application.
+---
 
-Building and Running via Docker
-Docker eliminates any requirement of having Java, Maven, or Apache Spark installed on the host operating system.
+##  How It Works (Pipeline Architecture)
 
-Open a terminal at the root folder of the project (MovieRecommenderSpark/).
 
-Build the isolated Docker Image by running the following command:
 
-Bash
-docker build -t movie-recommender-spark .
-Execute the Spark Engine inside the container container:
+1. **Distributed Data Ingestion:** Parallel loads standard MovieLens datasets (`ratings.csv` and `movies.csv`) from the local resource bundle using automatic schema inference.
+2. **In-Memory ML Training:** Feeds interaction matrices into the ALS algorithm, running distributed iterative updates (`MaxIter=10`, `RegParam=0.1`) to establish the baseline model.
+3. **Data Relational Unpacking:** Uses Spark SQL `functions.explode` to flat-map nested recommended arrays into distinct, linear data rows.
+4. **Contextual Title Joining:** Executes an inner relational join across dataframes using `movieId` as the primary key to swap raw integers with human-readable film titles.
+5. **Portability Layer:** Packages the entire runtime cluster state (Java environment, Spark libraries, and data paths) inside an isolated Docker image.
 
-Bash
-docker run --rm movie-recommender-spark
-(Note: The --rm argument tells Docker to automatically prune and wipe the container memory/lifecycle once execution safely completes, saving host RAM).
+---
 
- Verification and Analytical Output Output
-Upon execution, Apache Spark initializes an in-memory cluster across all local micro-processing cores, executes the ALS model optimization, links the catalog data, and streams clean rows onto the stdout console interface:
+##  Sample Analytics Output
 
-Plaintext
- Top Movie Recommendations with Titles:
-+------+-------------------------------------+------------------+
-|userId|title                                |predicted_rating  |
-+------+-------------------------------------+------------------+
-|1     |Toy Story (1995)                     |5.797703          |
-|1     |Matrix, The (1999)                   |5.6390605         |
-|1     |Forrest Gump (1994)                  |5.5880027         |
-|2     |Inception (2010)                     |4.859169          |
-|2     |Interstellar (2014)                  |4.8248844         |
-+------+-------------------------------------+------------------+
- Educational Context & Core Principles Demonstrated
-Microservice and Cloud Readiness: Demonstrates cloud orchestration design patterns where backend computational workflows are compartmentalized.
+| User ID | Title | Predicted Rating |
+| :--- | :--- | :--- |
+| 1 | Toy Story (1995) | 5.797703 |
+| 1 | Matrix, The (1999) | 5.639060 |
+| 1 | Forrest Gump (1994) | 5.588002 |
+| 2 | Inception (2010) | 4.859169 |
+| 2 | Interstellar (2014) | 4.824884 |
 
-Advanced Mathematical Optimization: Utilizes high-performance matrix-factorization algorithms to map multi-dimensional consumer affinity matrices.
+---
 
-Resource Resiliency: Features precise cluster lifecycle teardown handling through the active implementation of spark.stop() to guarantee local host computing stability.
-"""
+## 🚀 Getting Started
 
-with open("README.md", "w", encoding="utf-8") as f:
-f.write(readme_content)
-
-print("README.md generated successfully.")
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/YOUR_USERNAME/MovieRecommenderSpark.git](https://github.com/YOUR_USERNAME/MovieRecommenderSpark.git)
+cd MovieRecommenderSpark
